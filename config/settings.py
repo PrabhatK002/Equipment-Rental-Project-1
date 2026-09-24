@@ -84,8 +84,8 @@ TEMPLATES = [
 
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Freelancer portal',
-    'DESCRIPTION': '''Absolutely. If you want to build a Freelancing Portal using Django + Django REST Framework (DRF) + Khalti payment, I’d structure it as a marketplace similar in concept to Upwork/Fiverr, but simplified for a Nepali-focused platform. ''',
+    'TITLE': 'Equipment Rental System',
+    'DESCRIPTION': '''Equipment Rental System using Django Rest Framework.''',
     'VERSION': '0.0.1',
     'SERVE_INCLUDE_SCHEMA': False,
     # OTHER SETTINGS
