@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'apps.accounts',
     'apps.customers',
     'apps.managers',
+    'apps.locations',
 
 
      # 3rd party apps
