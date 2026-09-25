@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'apps.customers',
     'apps.managers',
     'apps.locations',
+    'apps.carts',
+    'apps.equipments',
 
 
      # 3rd party apps
@@ -88,6 +90,8 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': '''Equipment Rental System using Django Rest Framework.''',
     'VERSION': '0.0.1',
     'SERVE_INCLUDE_SCHEMA': False,
+    'SCHEMA_COORDINATOR_BY_PATH': True,
+    'SCHEMA_PATH_PREFIX': r'/api/v1/',
     # OTHER SETTINGS
 }
 

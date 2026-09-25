@@ -22,10 +22,12 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/auth/', include('apps.accounts.api.v1.urls')),
-    path('api/customers/', include('apps.customers.api.v1.urls')),
-    path('api/managers/', include('apps.managers.api.v1.urls')),
-    path('api/locations/', include('apps.locations.api.v1.urls')),
+    path('api/v1/auth/', include('apps.accounts.api.v1.urls')),
+    path('api/v1/customers/', include('apps.customers.api.v1.urls')),
+    path('api/v1/managers/', include('apps.managers.api.v1.urls')),
+    path('api/v1/locations/', include('apps.locations.api.v1.urls')),
+    #('api/v1/carts/', include('apps.carts.api.v1.urls')),
+    path('api/v1/equipments/', include('apps.equipments.api.v1.urls')),
 
 
 

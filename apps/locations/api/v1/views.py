@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.generics import get_object_or_404
+from drf_spectacular.utils import extend_schema
 
 
 from apps.locations.api.v1.permissions import LocationPermission
@@ -13,7 +14,9 @@ from apps.locations.api.v1.serializers import LocationSerializer
 
 class LocationView(APIView):
     permission_classes = [LocationPermission]
+    serializer_class = LocationSerializer
 
+    @extend_schema(operation_id="retrieve_location")
     def get(self, request):
         locations = Location.objects.all()
         serializer = LocationSerializer(locations, many=True)
@@ -38,8 +41,10 @@ class LocationView(APIView):
 
 
 class LocationDetailView(APIView):
+    serializer_class = LocationSerializer
     permission_classes = [LocationPermission]
 
+    @extend_schema(operation_id="list_locations")
     def get(self, request, pk):
         location = get_object_or_404(Location, pk=pk)
         serializer = LocationSerializer(location)

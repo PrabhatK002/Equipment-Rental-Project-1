@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.generics import get_object_or_404
+from drf_spectacular.utils import extend_schema
 
 from apps.accounts.models import RoleChoice
 from apps.managers.api.v1.permissions import ManagerProfilePermission
@@ -10,8 +11,10 @@ from apps.managers.models import Manager
 
 
 class ManagerView(APIView):
+    serializer_class = ManagerSerializer
     permission_classes = [ManagerProfilePermission]
 
+    @extend_schema(operation_id="list_manager_profiles")
     def get(self, request):
         if request.user.role == RoleChoice.ADMIN:
             managers = Manager.objects.all()
@@ -37,8 +40,10 @@ class ManagerView(APIView):
 
 
 class ManagerDetailView(APIView):
+    serializer_class = ManagerSerializer
     permission_classes = [ManagerProfilePermission]
 
+    @extend_schema(operation_id="retrieve_manager_profile")
     def get(self, request, pk):
         manager = get_object_or_404(Manager, pk=pk)
         serializer = ManagerSerializer(manager)

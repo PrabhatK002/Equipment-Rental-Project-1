@@ -12,9 +12,15 @@ from apps.customers.models import CustomerProfile
 from apps.managers.models import Manager
 from apps.managers.api.v1.serializers import ManagerSerializer
 
+from drf_spectacular.utils import extend_schema 
 
+@extend_schema(
+    request=RegisterSerializer,
+    responses={201: {"type": "object", "properties": {"message": {"type": "string"}}}},
+)
 @api_view(["POST"])
 def register(request):
+    serializer_class = RegisterSerializer
     request_data = request.data
     serializer = RegisterSerializer(data=request_data)
     if serializer.is_valid():
@@ -24,9 +30,12 @@ def register(request):
         return Response({"message": "Register Successfully"}, status.HTTP_201_CREATED)
     return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
-
+@extend_schema(
+    responses={200: UserInfoSerializer} # Tells Swagger what schema to expect on success
+)
 @api_view(["GET"])
 def me(request):
+    serializer_class = UserInfoSerializer
     user_serializer = UserInfoSerializer(request.user)
 
     profile_serializer = None
