@@ -26,8 +26,9 @@ urlpatterns = [
     path('api/v1/customers/', include('apps.customers.api.v1.urls')),
     path('api/v1/managers/', include('apps.managers.api.v1.urls')),
     path('api/v1/locations/', include('apps.locations.api.v1.urls')),
-    #('api/v1/carts/', include('apps.carts.api.v1.urls')),
+    path('api/v1/carts/', include('apps.carts.api.v1.urls')),
     path('api/v1/equipments/', include('apps.equipments.api.v1.urls')),
+    path('api/v1/rentals', include('apps.rentals.api.v1.urls')),
 
 
 

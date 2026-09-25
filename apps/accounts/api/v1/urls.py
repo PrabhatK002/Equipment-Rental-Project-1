@@ -5,13 +5,14 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from apps.accounts.api.v1.views import register, me
+from apps.accounts.api.v1.views import customer_register, manager_register, me
 
 
 urlpatterns=[
 
-    path('register/',register),
-    path('me', me, name="user-info"),
+    path('register/customer/',customer_register),
+    path('register/manager/', manager_register),
+    path('me/', me, name="user-info"),
 
     
     path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),

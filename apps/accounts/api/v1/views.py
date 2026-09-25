@@ -1,7 +1,9 @@
+from django.db import transaction
+
 from apps.accounts.api.v1.serializers import RegisterSerializer, UserInfoSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework import status
 
 from django.shortcuts import get_object_or_404
@@ -12,26 +14,71 @@ from apps.customers.models import CustomerProfile
 from apps.managers.models import Manager
 from apps.managers.api.v1.serializers import ManagerSerializer
 
-from drf_spectacular.utils import extend_schema 
+from drf_spectacular.utils import extend_schema
+
+from apps.rentals.api.v1.services import create_cart
+
 
 @extend_schema(
     request=RegisterSerializer,
     responses={201: {"type": "object", "properties": {"message": {"type": "string"}}}},
 )
 @api_view(["POST"])
-def register(request):
-    serializer_class = RegisterSerializer
-    request_data = request.data
-    serializer = RegisterSerializer(data=request_data)
+@permission_classes([AllowAny])
+@transaction.atomic
+def customer_register(request):
+
+    serializer = RegisterSerializer(data=request.data)
+
     if serializer.is_valid():
-        user = serializer.save()
-        user.set_password(request_data["password"])
+        user = serializer.save(role=RoleChoice.CUSTOMER)
+
+        user.set_password(request.data["password"])
         user.save()
-        return Response({"message": "Register Successfully"}, status.HTTP_201_CREATED)
-    return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+        create_cart(user=user)
+
+        return Response(
+            {"message": "Registered successfully"},
+            status=status.HTTP_201_CREATED,
+        )
+
+    return Response(
+        serializer.errors,
+        status=status.HTTP_400_BAD_REQUEST,
+    )
+
 
 @extend_schema(
-    responses={200: UserInfoSerializer} # Tells Swagger what schema to expect on success
+    request=RegisterSerializer,
+    responses={201: {"type": "object", "properties": {"message": {"type": "string"}}}},
+)
+@api_view(["POST"])
+@permission_classes([IsAdminUser])
+def manager_register(request):
+
+    serializer = RegisterSerializer(data=request.data)
+
+    if serializer.is_valid():
+        user = serializer.save(role=RoleChoice.MANAGER)
+
+        user.set_password(request.data["password"])
+        user.save()
+
+        return Response(
+            {"message": "Registered successfully"},
+            status=status.HTTP_201_CREATED,
+        )
+
+    return Response(
+        serializer.errors,
+        status=status.HTTP_400_BAD_REQUEST,
+    )
+
+
+@extend_schema(
+    responses={
+        200: UserInfoSerializer
+    }  # Tells Swagger what schema to expect on success
 )
 @api_view(["GET"])
 def me(request):

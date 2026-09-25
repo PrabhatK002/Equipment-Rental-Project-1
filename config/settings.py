@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'apps.locations',
     'apps.carts',
     'apps.equipments',
+    'apps.rentals',
 
 
      # 3rd party apps
