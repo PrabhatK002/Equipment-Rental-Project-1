@@ -19,13 +19,13 @@ class CartPermission(BasePermission):
 
         # Customer
         if request.user.role == RoleChoice.CUSTOMER:
-            if request.method == "GET":
-                customer = request.data.get("customer")
+            # if request.method == "GET":
+            #     customer = request.data.get("customer")
 
-                if not customer:
-                    return False
+            #     if not customer:
+            #         return False
 
-                return request.user == customer
+            #     return request.user == customer
 
             return True
 
