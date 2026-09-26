@@ -56,7 +56,10 @@ class CartItemsPermission(BasePermission):
                 if not cart_id:
                     return False
 
-                cart = get_object_or_404(Cart, id=cart_id)
+                cart = Cart.objects.filter(id=cart_id).first()
+
+                if not cart:
+                    return False
 
                 return cart.customer == request.user
 

@@ -13,7 +13,7 @@ class CartView(GenericAPIView):
     permission_classes = [CartPermission]
 
     def get(self, request):
-        cart = Cart.objects.filter(customer=request.user)
+        cart = Cart.objects.get(customer=request.user)
         serializer = self.get_serializer(cart)
 
         return Response(serializer.data, status.HTTP_200_OK)
@@ -27,7 +27,9 @@ class CartItemView(GenericAPIView):
 
 
     def get(self, request):
-        cart_items = CartItem.objects.filter(cart=request.data.get("cart"))
+        cart = Cart.objects.get(customer=request.user)
+        cart_items = CartItem.objects.filter(cart=cart)
+
         serializer = self.get_serializer(cart_items, many=True)
 
         return Response(serializer.data, status.HTTP_200_OK)
