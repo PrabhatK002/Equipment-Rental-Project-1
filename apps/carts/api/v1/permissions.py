@@ -11,23 +11,36 @@ class CartPermission(BasePermission):
         if not request.user.is_authenticated:
             return False
 
+        # if request.user.role in [
+        #     RoleChoice.ADMIN,
+        #     RoleChoice.MANAGER,
+        # ]:
+        #     return True
+
+        # # Customer
+        # if request.user.role == RoleChoice.CUSTOMER:
+        #     # if request.method == "GET":
+        #     #     customer = request.data.get("customer")
+
+        #     #     if not customer:
+        #     #         return False
+
+        #     #     return request.user == customer
+
+        #     return True
+
+        return True
+
+
+    def has_object_permission(self, request, view, obj):
         if request.user.role in [
             RoleChoice.ADMIN,
             RoleChoice.MANAGER,
         ]:
             return True
 
-        # Customer
         if request.user.role == RoleChoice.CUSTOMER:
-            # if request.method == "GET":
-            #     customer = request.data.get("customer")
-
-            #     if not customer:
-            #         return False
-
-            #     return request.user == customer
-
-            return True
+            return obj.customer == request.user
 
         return False
 
@@ -74,10 +87,18 @@ class CartItemsPermission(BasePermission):
             RoleChoice.ADMIN,
             RoleChoice.MANAGER,
         ]:
+            cart_id = request.data.get("cart")
+            cart = Cart.objects.filter(id=cart_id).first()
+            if cart:
+                return obj.cart == cart
             return True
 
         # Customer can access only their own CartItems
         if request.user.role == RoleChoice.CUSTOMER:
+            cart_id = request.data.get("cart")
+            cart = Cart.objects.filter(id=cart_id).first()
+            if cart:
+                return obj.cart.customer == request.user and obj.cart == cart
             return obj.cart.customer == request.user
 
         return False

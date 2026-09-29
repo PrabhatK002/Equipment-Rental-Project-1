@@ -5,13 +5,13 @@ from drf_spectacular.utils import extend_schema
 
 from apps.equipments.models import Category, Equipment
 from apps.equipments.api.v1.serializers import CategorySerializer, EquipmentSerializer
-from apps.equipments.api.v1.permissions import AdminManagerPermission
+from apps.equipments.api.v1.permissions import EquipmentPermission
 
 
 class CategoryView(GenericAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [AdminManagerPermission]
+    permission_classes = [EquipmentPermission]
 
     @extend_schema(operation_id="list_categories")
     def get(self, request):
@@ -39,7 +39,7 @@ class CategoryView(GenericAPIView):
 class CategoryDetailView(GenericAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [AdminManagerPermission]
+    permission_classes = [EquipmentPermission]
 
     @extend_schema(operation_id="retrieve_category")
     def get(self, request, pk):
@@ -95,7 +95,7 @@ class CategoryDetailView(GenericAPIView):
 class EquipmentView(GenericAPIView):
     queryset = Equipment.objects.all()
     serializer_class = EquipmentSerializer
-    permission_classes = [AdminManagerPermission]
+    permission_classes = [EquipmentPermission]
 
     @extend_schema(operation_id="list_equipments")
     def get(self, request):
@@ -123,7 +123,7 @@ class EquipmentView(GenericAPIView):
 class EquipmentDetailView(GenericAPIView):
     queryset = Equipment.objects.all()
     serializer_class = EquipmentSerializer
-    permission_classes = [AdminManagerPermission]
+    permission_classes = [EquipmentPermission]
 
     @extend_schema(operation_id="retrieve_equipment")
     def get(self, request, pk):
@@ -149,7 +149,7 @@ class EquipmentDetailView(GenericAPIView):
 
     def patch(self, request, pk):
         equipment = self.get_object()
-        serializer = self.get_serializer(equipment, data=request.data)
+        serializer = self.get_serializer(equipment, data=request.data, partial=True)
     
         if serializer.is_valid():
             serializer.save()

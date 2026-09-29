@@ -10,20 +10,20 @@ class CustomerPermission(BasePermission):
         if not request.user.is_authenticated:
             return False
 
-        # Admin can access customer profiles
-        if request.user.role == RoleChoice.ADMIN:
-            return True
+        # # Admin can access customer profiles
+        # if request.user.role == RoleChoice.ADMIN:
+        #     return True
 
-        # Customer can access the CustomerProfile API
-        if request.user.role == RoleChoice.CUSTOMER:
-            return True
+        # # Customer can access the CustomerProfile API
+        # if request.user.role == RoleChoice.CUSTOMER:
+        #     return True
 
-        return False
+        return True
 
     def has_object_permission(self, request, view, obj):
 
         # Admin can access any customer profile
-        if request.user.role == RoleChoice.ADMIN:
+        if request.user.role in [RoleChoice.ADMIN, RoleChoice.MANAGER]:
             return True
 
         # Customer can only access their own profile

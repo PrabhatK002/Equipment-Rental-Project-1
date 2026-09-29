@@ -44,7 +44,7 @@ class Equipment(models.Model):
     location = models.ForeignKey(
         "locations.Location",
         on_delete=models.PROTECT,
-        related_name="equipment",
+        related_name="location_equipment",
     )
 
     name = models.CharField(
@@ -93,8 +93,7 @@ class Equipment(models.Model):
 
     security_deposit = models.DecimalField(
         max_digits=10,
-        decimal_places=2,
-        default=0,
+        decimal_places=2
     )
 
     replacement_value = models.DecimalField(
@@ -113,24 +112,24 @@ class Equipment(models.Model):
     class Meta:
         db_table = "equipments"
 
-        constraints = [
-            models.CheckConstraint(
-                condition=Q(daily_rate__gt=0),
-                name="equipment_daily_rate_gt_zero",
-            ),
-            models.CheckConstraint(
-                condition=Q(weekly_rate__gt=0),
-                name="equipment_weekly_rate_gt_zero",
-            ),
-            models.CheckConstraint(
-                condition=Q(security_deposit__gt=0),
-                name="equipment_security_deposit_gt_zero",
-            ),
-            models.CheckConstraint(
-                condition=Q(replacement_value__gt=0),
-                name="equipment_replacement_value_gt_zero",
-            ),
-        ]
+        # constraints = [
+        #     models.CheckConstraint(
+        #         condition=Q(daily_rate__gt=0),
+        #         name="equipment_daily_rate_gt_zero",
+        #     ),
+        #     models.CheckConstraint(
+        #         condition=Q(weekly_rate__gt=0),
+        #         name="equipment_weekly_rate_gt_zero",
+        #     ),
+        #     models.CheckConstraint(
+        #         condition=Q(security_deposit__gt=0),
+        #         name="equipment_security_deposit_gt_zero",
+        #     ),
+        #     models.CheckConstraint(
+        #         condition=Q(replacement_value__gt=0),
+        #         name="equipment_replacement_value_gt_zero",
+        #     ),
+        # ]
 
     def __str__(self):
         return f"{self.name} ({self.asset_code})"

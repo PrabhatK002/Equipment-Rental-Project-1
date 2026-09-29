@@ -26,10 +26,17 @@ class ManagerView(APIView):
         return Response(serializer.data, status.HTTP_200_OK)
 
     def post(self, request):
-        serializer = ManagerSerializer(data=request.data)
+
+        if request.user.role != RoleChoice.MANAGER:
+            return Response(
+                {
+                    "message":"You don't have permission to access this part."
+                }
+            )
+        serializer = ManagerSerializer(data=request.data, context={'request': request})
 
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(user=request.user)
 
             return Response(
                 {"message": "Manager profile posted successfully."},
@@ -46,13 +53,15 @@ class ManagerDetailView(APIView):
     @extend_schema(operation_id="retrieve_manager_profile")
     def get(self, request, pk):
         manager = get_object_or_404(Manager, pk=pk)
+        self.check_object_permissions(request, manager)
         serializer = ManagerSerializer(manager)
 
         return Response(serializer.data, status.HTTP_200_OK)
 
     def put(self, request, pk):
         manager = get_object_or_404(Manager, pk=pk)
-        serializer = ManagerSerializer(manager, data=request.data)
+        self.check_object_permissions(request, manager)
+        serializer = ManagerSerializer(manager, data=request.data, context={'request': request})
 
         if serializer.is_valid():
             serializer.save()
@@ -65,7 +74,8 @@ class ManagerDetailView(APIView):
 
     def patch(self, request, pk):
         manager = get_object_or_404(Manager, pk=pk)
-        serializer = ManagerSerializer(manager, data=request.data, partial=True)
+        self.check_object_permissions(request, manager)
+        serializer = ManagerSerializer(manager, data=request.data, context={'request': request}, partial=True)
 
         if serializer.is_valid():
             serializer.save()
@@ -78,6 +88,7 @@ class ManagerDetailView(APIView):
 
     def delete(self, request, pk):
         manager = get_object_or_404(Manager, pk=pk)
+        self.check_object_permissions(request, manager)
 
         manager.delete()
 

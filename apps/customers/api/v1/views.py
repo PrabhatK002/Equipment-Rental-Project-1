@@ -3,6 +3,7 @@ from rest_framework import status
 from rest_framework.generics import GenericAPIView
 from drf_spectacular.utils import extend_schema 
 
+from apps.accounts.models import RoleChoice
 from apps.customers.models import CustomerProfile
 from apps.customers.api.v1.serializers import CustomerProfileSerializer
 from .permission import CustomerPermission
@@ -15,19 +16,34 @@ class CustomerProfileView(GenericAPIView):
 
     @extend_schema(operation_id="list_customer_profiles")
     def get(self, request):
+        if request.user.role == RoleChoice.CUSTOMER:
+            return Response(
+                {
+                    "message":"You don't have permission to access this part."
+                },
+                status.HTTP_403_FORBIDDEN
+            )
         customers = self.get_queryset()
         serializer = self.get_serializer(customers, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
+
+        if request.user.role in [RoleChoice.ADMIN, RoleChoice.MANAGER]:
+            return Response(
+                {
+                    "message":"You don't have permission to access this part."
+                },
+                status.HTTP_403_FORBIDDEN
+            )
         serializer = self.get_serializer(data=request.data)
 
         if serializer.is_valid():
-            serializer.save(user=self.request.user)
+            serializer.save(user=request.user)
 
             return Response(
-                {"message": "Customer profile posted successfully."},
+                {"message": "Customer profile created successfully."},
                 status=status.HTTP_201_CREATED,
             )
 

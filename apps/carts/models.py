@@ -1,3 +1,5 @@
+from django.utils import timezone
+
 from django.db import models
 
 # Create your models here.
@@ -27,8 +29,12 @@ class CartItem(models.Model):
         on_delete=models.PROTECT,
         related_name="cart_items",
     )
-    start_at = models.DateTimeField()
-    end_at = models.DateTimeField()
+    start_date = models.DateField(
+        default=timezone.localdate
+    )
+    end_date = models.DateField(
+        default=timezone.localdate
+    )
     quantity = models.PositiveIntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

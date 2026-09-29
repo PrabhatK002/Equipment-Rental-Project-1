@@ -10,7 +10,6 @@ class ManagerSerializer(serializers.ModelSerializer):
 
         fields = [
             "id",
-            "user",
             "employee_code",
             "created_at",
             "updated_at",
@@ -18,6 +17,7 @@ class ManagerSerializer(serializers.ModelSerializer):
 
         read_only_fields = [
             "id",
+            "user",
             "created_at",
             "updated_at",
         ]
@@ -28,14 +28,14 @@ class ManagerSerializer(serializers.ModelSerializer):
 
         return data
 
-    def validate_user(self, user):
-        logged_user = self.context['request'].user
+    # def validate_user(self, user):
+    #     logged_user = self.context['request'].user
 
-        if logged_user.role == RoleChoice.ADMIN:
-            return user
+    #     if logged_user.role == RoleChoice.ADMIN:
+    #         return user
 
-        elif logged_user.role == RoleChoice.MANAGER and logged_user == user:
-            return user
+    #     elif logged_user.role == RoleChoice.MANAGER and logged_user == user:
+    #         return user
 
-        else:
-            raise ValidationError("You don't have permission to access this part.")
+    #     else:
+    #         raise ValidationError("You don't have permission to access this part.")
