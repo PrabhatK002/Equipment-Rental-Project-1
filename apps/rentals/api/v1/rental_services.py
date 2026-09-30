@@ -8,3 +8,5 @@ def create_cart(user):
     cart = Cart.objects.create(customer=customer)
 
     return cart
+
+

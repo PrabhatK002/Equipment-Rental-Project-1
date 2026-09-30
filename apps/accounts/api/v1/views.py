@@ -16,7 +16,7 @@ from apps.managers.api.v1.serializers import ManagerSerializer
 
 from drf_spectacular.utils import extend_schema
 
-from apps.rentals.api.v1.services import create_cart
+from apps.rentals.api.v1.rental_services import create_cart
 
 
 @extend_schema(
