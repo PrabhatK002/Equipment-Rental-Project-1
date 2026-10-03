@@ -20,6 +20,8 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+#load_dotenv()
+load_dotenv(BASE_DIR / ".env")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
@@ -49,6 +51,8 @@ INSTALLED_APPS = [
     'apps.carts',
     'apps.equipments',
     'apps.rentals',
+    'apps.maintenances',
+    'apps.payments',
 
 
      # 3rd party apps
@@ -195,3 +199,8 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+
+TIME_ZONE = "Asia/Kathmandu"
+
+USE_TZ = True

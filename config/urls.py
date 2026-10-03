@@ -19,6 +19,8 @@ from django.urls import path, include
 
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
+from apps.payments.views import khalti_callback
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,7 +30,10 @@ urlpatterns = [
     path('api/v1/locations/', include('apps.locations.api.v1.urls')),
     path('api/v1/carts/', include('apps.carts.api.v1.urls')),
     path('api/v1/equipments/', include('apps.equipments.api.v1.urls')),
-    path('api/v1/rentals', include('apps.rentals.api.v1.urls')),
+    path('api/v1/rentals/', include('apps.rentals.api.v1.urls')),
+    path('api/v1/maintenances/', include('apps.maintenances.api.v1.urls')),
+    path('api/v1/payments/', include('apps.payments.api.v1.urls')),
+    path('khalti_callback/',khalti_callback, name="khalti"),
 
 
 
