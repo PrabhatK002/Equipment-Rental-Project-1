@@ -37,6 +37,7 @@ urlpatterns = [
 
 
 
+
      # api docs
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     # Optional UI:
